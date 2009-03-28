@@ -2,7 +2,7 @@
 #include <string.h>
 #include "mnemonic.h"
 
-main ()
+int main ()
 {
   mn_byte buf[0x10000];
   char outbuf[0x90000];

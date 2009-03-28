@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include "mnemonic.h"
 
-main ()
+int main ()
 {
   char buf[0x90000];
   mn_byte outbuf[0x10000];

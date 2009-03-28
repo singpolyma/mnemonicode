@@ -22,6 +22,8 @@
 
 */
 
+#include <string.h>
+
 #include "mnemonic.h"
 
 /*
@@ -128,7 +130,7 @@ mn_encode_word (void *src, int srcsize, int n)
 static int
 isletter (char c)
 {
-  return c >= 'A' && c <= 'Z' || c >= 'a' && c <= 'z';
+  return (c >= 'A' && c <= 'Z') || (c >= 'a' && c <= 'z');
 }
 
 /*
@@ -325,7 +327,7 @@ mn_decode_word_index (mn_index index, void *dest, int destsize, int *offset)
 	}
       else
 	{			/* catch invalid encodings */
-	  if (index >= 1625 || index == 1624 && x > 1312671)
+	  if (index >= 1625 || (index == 1624 && x > 1312671))
 	    {
 	      *offset = MN_EENCODING;
 	      return *offset;
