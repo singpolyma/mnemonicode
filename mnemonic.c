@@ -22,6 +22,7 @@
 
 */
 
+#include <ctype.h>
 #include <string.h>
 
 #include "mnemonic.h"
@@ -123,17 +124,6 @@ mn_encode_word (void *src, int srcsize, int n)
 
 
 /*
- * isletter
- * Utility function - returns nonzero if character c is an ASCII letter.
- */
-
-static int
-isletter (char c)
-{
-  return (c >= 'A' && c <= 'Z') || (c >= 'a' && c <= 'z');
-}
-
-/*
  * mn_next_word_index
  *
  * Description:
@@ -163,10 +153,10 @@ mn_next_word_index (char **ptr)
   char c;
   mn_index idx;
 
-  while (**ptr && !isletter (**ptr))	/* skip separator chars */
+  while (**ptr && !isalpha (**ptr))	/* skip separator chars */
     (*ptr)++;
   wordstart = *ptr;		/* save for error reporting */
-  while (**ptr && isletter (**ptr) && i < MN_WORD_BUFLEN - 1)
+  while (**ptr && isalpha (**ptr) && i < MN_WORD_BUFLEN - 1)
     {
       c = *(*ptr)++;
       if (c >= 'A' && c <= 'Z')
@@ -174,9 +164,9 @@ mn_next_word_index (char **ptr)
       wordbuf[i++] = c;
     }
   wordbuf[i] = '\0';
-  while (**ptr && isletter (**ptr))	/* skip tail of long words */
+  while (**ptr && isalpha (**ptr))	/* skip tail of long words */
     (*ptr)++;
-  while (**ptr && !isletter (**ptr))	/* skip separators */
+  while (**ptr && !isalpha (**ptr))	/* skip separators */
     (*ptr)++;
 
   if (wordbuf[0] == '\0')
@@ -401,25 +391,25 @@ mn_encode (void *src, int srcsize, char *dest, int destsize, char *format)
   fmt = format;
   for (n = 0; n < mn_words_required (srcsize); n++)
     {
-      while (dest < destend && *fmt != '\0' && !isletter (*fmt))
+      while (dest < destend && *fmt != '\0' && !isalpha (*fmt))
 	*dest++ = *fmt++;
       if (dest >= destend)
 	return MN_EOVERRUN;
       if (*fmt == '\0')
 	{
-	  if (isletter (fmt[-1]) && isletter (format[0]))
+	  if (isalpha (fmt[-1]) && isalpha (format[0]))
 	    return MN_EFORMAT;
 	  fmt = format;
-	  while (dest < destend && *fmt != '\0' && !isletter (*fmt))
+	  while (dest < destend && *fmt != '\0' && !isalpha (*fmt))
 	    *dest++ = *fmt++;
-	  if (!isletter (*fmt))
+	  if (!isalpha (*fmt))
 	    return MN_EFORMAT;
 	}
       word = mn_encode_word (src, srcsize, n);
       if (word == 0)
 	return MN_EOVERRUN;	/* shouldn't happen, actually */
 
-      while (isletter (*fmt))
+      while (isalpha (*fmt))
 	fmt++;
       while (dest < destend && *word != '\0')
 	*dest++ = *word++;
