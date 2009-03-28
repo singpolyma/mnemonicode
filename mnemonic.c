@@ -255,7 +255,7 @@ mn_decode_word_index (mn_index index, void *dest, int destsize, int *offset)
   if (*offset < 0)		/* Error from previous call? report it */
     return *offset;
 
-  if (index < 0 || index > MN_WORDS)	/* Word index out of range */
+  if (index > MN_WORDS)	/* Word index out of range */
     {
       *offset = MN_EINDEX;
       return *offset;
