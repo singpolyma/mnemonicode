@@ -1,5 +1,7 @@
 .PHONY: sample_programs clean
 
+CFLAGS=-Wall -Wextra -ansi -pedantic
+
 sample_programs: mnencode mndecode
 
 mnencode: mnencode.o mnemonic.o mn_wordlist.o

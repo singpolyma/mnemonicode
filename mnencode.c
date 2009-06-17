@@ -2,10 +2,10 @@
 #include <string.h>
 #include <stdlib.h>
 #include <errno.h>
+#include <ctype.h>
 #include "mnemonic.h"
 
-int hex2bytes(const char *in, mn_byte *out) {
-	int inlen = strlen(in);
+int hex2bytes(int inlen, const mn_byte *in, mn_byte *out) {
 	char t[3];
 	int i, j = 0, k = 0;
 	if(inlen % 2 != 0) {
@@ -46,7 +46,7 @@ int main(int argc, char **argv) {
 	buflen = fread(cbuf, 1, sizeof cbuf, stdin);
 
 	if(hex_encoded_input) {
-		buflen = hex2bytes(cbuf, xbuf);
+		buflen = hex2bytes(n, cbuf, xbuf);
 		if(buflen < 0) {
 			perror("hex2bytes");
 			return EXIT_FAILURE;
