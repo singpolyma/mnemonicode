@@ -46,7 +46,7 @@ int main(int argc, char **argv) {
 	buflen = fread(cbuf, 1, sizeof cbuf, stdin);
 
 	if(hex_encoded_input) {
-		buflen = hex2bytes(n, cbuf, xbuf);
+		buflen = hex2bytes(buflen, cbuf, xbuf);
 		if(buflen < 0) {
 			perror("hex2bytes");
 			return EXIT_FAILURE;
