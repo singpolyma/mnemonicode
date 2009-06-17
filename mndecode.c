@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <stdlib.h>
 #include "mnemonic.h"
 
 int main(void) {
@@ -13,9 +14,10 @@ int main(void) {
 	n = mn_decode(buf, outbuf, sizeof outbuf);
 	if(n < 0) {
 		fprintf(stderr, "mn_decode result %d\n", n);
-	} else {
-		fwrite(outbuf, 1, n, stdout);
+		return EXIT_FAILURE;
 	}
 
-	return 0;
+	fwrite(outbuf, 1, n, stdout);
+
+	return EXIT_SUCCESS;
 }

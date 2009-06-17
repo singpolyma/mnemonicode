@@ -58,11 +58,12 @@ int main(int argc, char **argv) {
 
 	n = mn_encode(buf, buflen, outbuf, sizeof outbuf, "x x x. x x x. x x x\n");
 
-	if(n == 0) {
-		fwrite(outbuf, 1, strlen (outbuf), stdout);
-	} else {
+	if(n != 0) {
 		fprintf(stderr, "mn_encode error %d\n", n);
+		return EXIT_FAILURE;
 	}
+
+	fwrite(outbuf, 1, strlen (outbuf), stdout);
 	putchar('\n');
 
 	return EXIT_SUCCESS;
