@@ -5,10 +5,30 @@
 #include <ctype.h>
 #include "mnemonic.h"
 
+int counthex(const mn_byte *s, size_t len) {
+	int total = 0;
+	size_t i;
+	for(i = 0; i < len; i++) {
+		if(isxdigit(s[i])) total++;
+	}
+	return total;
+}
+
+int countLeadingCrapAndZeros(const mn_byte *in, size_t inlen) {
+	size_t i;
+	for(i = 0; i < inlen; i++) {
+		if(in[i] != '0' && isxdigit(in[i])) break; /* Find first non-zero hex digit */
+	}
+	return i;
+}
+
 int hex2bytes(int inlen, const mn_byte *in, mn_byte *out) {
 	char t[3];
 	int i, j = 0, k = 0;
-	if(inlen % 2 != 0) {
+	i = countLeadingCrapAndZeros(in, inlen);
+	inlen = inlen - i;
+	in = in + i;
+	if(counthex(in, inlen) % 2 != 0) {
 		t[j++] = '0';
 	}
 	for(i = 0; i < inlen; i++) {
