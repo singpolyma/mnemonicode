@@ -25,7 +25,7 @@ int main(int argc, char **argv) {
 
 	if(hex_encoded_output) {
 		for(i = 0; i < n; i++) {
-			printf("%X", outbuf[i]);
+			printf("%02X", outbuf[i]);
 		}
 	} else {
 		fwrite(outbuf, 1, n, stdout);
