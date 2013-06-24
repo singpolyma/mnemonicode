@@ -5,7 +5,7 @@ These routines implement a method for encoding binary data into a sequence
 of words which can be spoken over the phone, for example, and converted
 back to data on the other side.
 
-For more information see http://www.tothink.com/mnemonic
+For more information see <http://web.archive.org/web/20101031205747/http://www.tothink.com/mnemonic/>
 
 mnemonic.h	Header file
 mnemonic.c	Encoding/decoding and associated routines
