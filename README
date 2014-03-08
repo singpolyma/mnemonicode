@@ -13,4 +13,6 @@ mn_wordlist.c	The word list itself
 mnencode.c	Sample program - encode data from stdin to stdout
 mndecode.c	Sample program - decode data from stdin to stdout
 
-Oren Tirosh <oren@hishome.net>
+== Other Implementations ==
+
+JavaScript: <https://github.com/mbrubeck/mnemonic.js>
