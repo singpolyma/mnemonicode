@@ -65,13 +65,14 @@ mn_words_required (int size)
  *   1..MN_WORDS - word index. May be used as index to the mn_words[] array
  */
 
-mn_index mn_encode_word_index (void *src, int srcsize, int n)
+mn_index mn_encode_word_index (void *vsrc, int srcsize, int n)
 {
   mn_word32 x = 0;		/* Temporary for MN_BASE arithmetic */
   int offset;			/* Offset into src */
   int remaining;		/* Octets remaining to end of src */
   int extra = 0;		/* Index 7 extra words for 24 bit data */
   int i;
+  mn_byte *src = vsrc;
 
   if (n < 0 || n >= mn_words_required (srcsize))
     return 0;			/* word out of range */
@@ -82,7 +83,7 @@ mn_index mn_encode_word_index (void *src, int srcsize, int n)
   if (remaining >= 4)
     remaining = 4;
   for (i = 0; i < remaining; i++)
-    x |= ((mn_byte *) src)[offset + i] << (i * 8);	/* endianness-agnostic */
+    x |= (unsigned long)src[offset + i] << (i * 8);	/* endianness-agnostic */
 
   switch (n % 3)
     {
@@ -236,11 +237,12 @@ mn_next_word_index (char **ptr)
  */
 
 int
-mn_decode_word_index (mn_index index, void *dest, int destsize, int *offset)
+mn_decode_word_index (mn_index index, void *vdest, int destsize, int *offset)
 {
   mn_word32 x;			/* Temporary for MN_BASE arithmetic */
   int groupofs;
   int i;
+  mn_byte *dest = vdest;
 
   if (*offset < 0)		/* Error from previous call? report it */
     return *offset;
@@ -267,7 +269,7 @@ mn_decode_word_index (mn_index index, void *dest, int destsize, int *offset)
   x = 0;
   for (i = 0; i < 4; i++)
     if (groupofs + i < destsize)	/* Ignore any bytes outside buffer */
-      x |= ((mn_byte *) dest)[groupofs + i] << (i * 8);	/* assemble number */
+      x |= (unsigned long)dest[groupofs + i] << (i * 8);	/* assemble number */
 
   if (index == MN_EOF)		/* Got EOF signal */
     {
@@ -339,7 +341,7 @@ mn_decode_word_index (mn_index index, void *dest, int destsize, int *offset)
   for (i = 0; i < 4; i++)
     if (groupofs + i < destsize)	/* Don't step outside the buffer */
       {
-	((mn_byte *) dest)[groupofs + i] = (mn_byte) x % 256;
+	dest[groupofs + i] = (mn_byte) x % 256;
 	x /= 256;
       }
   return MN_OK;
