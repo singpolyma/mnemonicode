@@ -104,3 +104,4 @@ mndecode.c	Sample program - decode data from stdin to stdout
 == Other Implementations ==
 
 JavaScript: <https://github.com/mbrubeck/mnemonic.js>
+Go: <https://bitbucket.org/dchapes/mnemonicode>
