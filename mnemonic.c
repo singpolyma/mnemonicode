@@ -447,13 +447,16 @@ mn_decode (char *src, void *dest, int destsize)
 {
   mn_index index;
   int offset = 0;
+  int status;
 
   while ((index = mn_next_word_index (&src)) != 0)
     {
-      if (index == 0 && *src != 0)
-	return MN_EWORD;
       (void) mn_decode_word_index (index, dest, destsize, &offset);
     }
-  (void) mn_decode_word_index (MN_EOF, dest, destsize, &offset);
+  if (*src != 0)
+    return MN_EWORD;
+  status = mn_decode_word_index (MN_EOF, dest, destsize, &offset);
+  if (status < 0)
+    return status;
   return offset;
 }
