@@ -1,0 +1,26 @@
+name: releaser
+
+on:
+    push:
+        tags:
+            - '*.*.*'
+
+jobs:
+    ubuntubuild:
+        runs-on: ubuntu-latest
+        steps:
+            -   name: Checkout
+                uses: actions/checkout@v2
+                with:
+                    fetch-depth: 0
+            -   name: Build
+                run: |
+                  sudo apt-get install -y build-essential gcc mingw-w64-tools zip gzip tar g++-mingw-w64-x86-64
+                  make
+                  tar czf linux-amd64.tar.gz mnencode mndecode
+            - name: Upload release binaries
+              uses: alexellis/upload-assets@0.4.0
+              env:
+                GITHUB_TOKEN: ${{ github.token }}
+              with:
+                asset_paths: '["linux-amd64.tar.gz"]'
